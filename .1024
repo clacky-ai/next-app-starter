@@ -6,15 +6,3 @@ dependency_command: npm install
 
 # Command to run when "Run" button clicked
 run_command: npm run dev
-
-# Build command for production (compile command)
-compile_command: npm run build
-
-# Linter configuration for code quality
-linter_config:
-  - config_path: 'tsconfig.json'
-    type: 'typescript'
-    language: 'typescript'
-  - config_path: 'next.config.ts'
-    type: 'nextjs'
-    language: 'typescript'
