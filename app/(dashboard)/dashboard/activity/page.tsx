@@ -7,8 +7,10 @@ import {
   UserCog,
   AlertCircle,
   UserMinus,
-  Mail,
-  CheckCircle,
+  Share2,
+  Eye,
+  FileText,
+  Trash2,
   type LucideIcon,
 } from 'lucide-react';
 import { ActivityType } from '@/lib/db/schema';
@@ -21,10 +23,10 @@ const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.UPDATE_PASSWORD]: Lock,
   [ActivityType.DELETE_ACCOUNT]: UserMinus,
   [ActivityType.UPDATE_ACCOUNT]: Settings,
-  [ActivityType.CREATE_TEAM]: UserPlus,
-  [ActivityType.REMOVE_TEAM_MEMBER]: UserMinus,
-  [ActivityType.INVITE_TEAM_MEMBER]: Mail,
-  [ActivityType.ACCEPT_INVITATION]: CheckCircle,
+  [ActivityType.SHARE_CREATED]: Share2,
+  [ActivityType.SHARE_ACCESSED]: Eye,
+  [ActivityType.SHARE_UPDATED]: FileText,
+  [ActivityType.SHARE_DELETED]: Trash2,
 };
 
 function getRelativeTime(date: Date) {
@@ -55,14 +57,14 @@ function formatAction(action: ActivityType): string {
       return 'You deleted your account';
     case ActivityType.UPDATE_ACCOUNT:
       return 'You updated your account';
-    case ActivityType.CREATE_TEAM:
-      return 'You created a new team';
-    case ActivityType.REMOVE_TEAM_MEMBER:
-      return 'You removed a team member';
-    case ActivityType.INVITE_TEAM_MEMBER:
-      return 'You invited a team member';
-    case ActivityType.ACCEPT_INVITATION:
-      return 'You accepted an invitation';
+    case ActivityType.SHARE_CREATED:
+      return 'You created a new share';
+    case ActivityType.SHARE_ACCESSED:
+      return 'Someone accessed your share';
+    case ActivityType.SHARE_UPDATED:
+      return 'You updated a share';
+    case ActivityType.SHARE_DELETED:
+      return 'You deleted a share';
     default:
       return 'Unknown action occurred';
   }
@@ -91,8 +93,8 @@ export default async function ActivityPage() {
 
                 return (
                   <li key={log.id} className="flex items-center space-x-4">
-                    <div className="bg-orange-100 rounded-full p-2">
-                      <Icon className="w-5 h-5 text-orange-600" />
+                    <div className="bg-blue-100 rounded-full p-2">
+                      <Icon className="w-5 h-5 text-blue-600" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">
@@ -109,12 +111,12 @@ export default async function ActivityPage() {
             </ul>
           ) : (
             <div className="flex flex-col items-center justify-center text-center py-12">
-              <AlertCircle className="h-12 w-12 text-orange-500 mb-4" />
+              <AlertCircle className="h-12 w-12 text-blue-500 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No activity yet
               </h3>
               <p className="text-sm text-gray-500 max-w-sm">
-                When you perform actions like signing in or updating your
+                When you perform actions like creating shares, signing in, or updating your
                 account, they'll appear here.
               </p>
             </div>

@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
     ppr: true,
     clientSegmentCache: true,
     nodeMiddleware: true
-  }
+  },
+  allowedDevOrigins: ['*.clackypaas.com']
 };
 
 export default nextConfig;
