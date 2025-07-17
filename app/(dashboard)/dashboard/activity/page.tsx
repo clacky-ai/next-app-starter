@@ -74,8 +74,8 @@ export default async function ActivityPage() {
   const logs = await getActivityLogs();
 
   return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">
         Activity Log
       </h1>
       <Card>
@@ -123,6 +123,6 @@ export default async function ActivityPage() {
           )}
         </CardContent>
       </Card>
-    </section>
+    </div>
   );
 }

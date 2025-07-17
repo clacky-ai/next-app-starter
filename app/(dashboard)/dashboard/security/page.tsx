@@ -34,8 +34,8 @@ export default function SecurityPage() {
   >(deleteAccount, {});
 
   return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium bold text-gray-900 mb-6">
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">
         Security Settings
       </h1>
       <Card className="mb-8">
@@ -162,6 +162,6 @@ export default function SecurityPage() {
           </form>
         </CardContent>
       </Card>
-    </section>
+    </div>
   );
 }

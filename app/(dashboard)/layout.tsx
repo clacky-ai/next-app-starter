@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { use, useState, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
-import { CircleIcon, Home, LogOut } from 'lucide-react';
+import { CircleIcon, Home, LogOut, Settings, Shield, Activity, User as UserIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { signOut } from '@/app/(login)/actions';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { User } from '@/lib/db/schema';
 import useSWR, { mutate } from 'swr';
 
@@ -22,6 +22,14 @@ function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: user } = useSWR<User>('/api/user', fetcher);
   const router = useRouter();
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: '/dashboard', icon: Home, label: 'Dashboard' },
+    { href: '/dashboard/general', icon: Settings, label: 'General' },
+    { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
+    { href: '/dashboard/security', icon: Shield, label: 'Security' }
+  ];
 
   async function handleSignOut() {
     await signOut();
@@ -52,21 +60,31 @@ function UserMenu() {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="flex flex-col gap-1">
-        <DropdownMenuItem className="cursor-pointer">
-          <Link href="/dashboard" className="flex w-full items-center">
-            <Home className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
-          </Link>
-        </DropdownMenuItem>
-        <form action={handleSignOut} className="w-full">
-          <button type="submit" className="flex w-full">
-            <DropdownMenuItem className="w-full flex-1 cursor-pointer">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Sign out</span>
-            </DropdownMenuItem>
-          </button>
-        </form>
+      <DropdownMenuContent align="end" className="flex flex-col gap-1 w-48">
+        <div className="px-2 py-1.5 text-sm font-medium text-gray-900 border-b border-gray-100">
+          <div className="flex items-center">
+            <UserIcon className="mr-2 h-4 w-4" />
+            <span className="truncate">{user.name || user.email}</span>
+          </div>
+        </div>
+        {navItems.map((item) => (
+          <DropdownMenuItem key={item.href} className="cursor-pointer">
+            <Link href={item.href} className="flex w-full items-center">
+              <item.icon className="mr-2 h-4 w-4" />
+              <span>{item.label}</span>
+            </Link>
+          </DropdownMenuItem>
+        ))}
+        <div className="border-t border-gray-100">
+          <form action={handleSignOut} className="w-full">
+            <button type="submit" className="flex w-full">
+              <DropdownMenuItem className="w-full flex-1 cursor-pointer">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </button>
+          </form>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
