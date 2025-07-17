@@ -2,13 +2,13 @@
 # This file configures the development environment for the Next.js sharing application
 
 # Command to install or update dependencies, will execute each time a new thread created to ensure dependencies up-to-date
-dependency_command: pnpm install
+dependency_command: npm install
 
 # Command to run when "Run" button clicked
-run_command: pnpm run dev
+run_command: npm run dev
 
 # Build command for production (compile command)
-compile_command: pnpm run build
+compile_command: npm run build
 
 # Linter configuration for code quality
 linter_config:
