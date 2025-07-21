@@ -3,10 +3,13 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { getUser } from '@/lib/db/queries';
 import { SWRConfig } from 'swr';
+import Header from '@/components/header';
+import { ThemeProvider } from '@/contexts/theme-context';
+import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'ShareSpace - Content Sharing Platform',
-  description: 'Create, manage, and track your shared content with ease. Built with Next.js and modern technologies.'
+  title: siteConfig.title,
+  description: siteConfig.description
 };
 
 export const viewport: Viewport = {
@@ -23,20 +26,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
+      className={`${manrope.className}`}
     >
-      <body className="min-h-[100dvh] bg-gray-50">
-        <SWRConfig
-          value={{
-            fallback: {
-              // We do NOT await here
-              // Only components that read this data will suspend
-              '/api/user': getUser()
-            }
-          }}
-        >
-          {children}
-        </SWRConfig>
+      <body className="min-h-[100dvh] bg-background text-foreground">
+        <ThemeProvider>
+          <SWRConfig
+            value={{
+              fallback: {
+                // We do NOT await here
+                // Only components that read this data will suspend
+                '/api/user': getUser()
+              }
+            }}
+          >
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              {children}
+            </div>
+          </SWRConfig>
+        </ThemeProvider>
       </body>
     </html>
   );
