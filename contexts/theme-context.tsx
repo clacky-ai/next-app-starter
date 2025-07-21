@@ -19,12 +19,6 @@ export const themeColors: ThemeColor[] = [
     primaryForeground: '0 0% 98%'
   },
   {
-    name: 'Purple',
-    value: 'purple',
-    primary: '258 90% 58%', // purple-600 in HSL
-    primaryForeground: '0 0% 98%'
-  },
-  {
     name: 'Green',  
     value: 'green',
     primary: '142 76% 36%', // green-500 in HSL
@@ -34,12 +28,6 @@ export const themeColors: ThemeColor[] = [
     name: 'Orange',
     value: 'orange', 
     primary: '25 95% 53%', // orange-500 in HSL
-    primaryForeground: '0 0% 98%'
-  },
-  {
-    name: 'Pink',
-    value: 'pink',
-    primary: '330 81% 60%', // pink-500 in HSL
     primaryForeground: '0 0% 98%'
   },
   {
