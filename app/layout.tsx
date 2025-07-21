@@ -6,6 +6,7 @@ import { SWRConfig } from 'swr';
 import Header from '@/components/header';
 import { ThemeProvider } from '@/contexts/theme-context';
 import { siteConfig } from '@/lib/config';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   title: siteConfig.title,
@@ -18,11 +19,15 @@ export const viewport: Viewport = {
 
 const manrope = Manrope({ subsets: ['latin'] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+  const isAdminRoute = pathname.startsWith('/admin');
+
   return (
     <html
       lang="en"
@@ -40,7 +45,7 @@ export default function RootLayout({
             }}
           >
             <div className="flex flex-col min-h-screen">
-              <Header />
+              {isAdminRoute && <Header />}
               {children}
             </div>
           </SWRConfig>

@@ -29,7 +29,7 @@ function UserMenu() {
   async function handleSignOut() {
     await signOut();
     mutate('/api/user');
-    router.push('/');
+    router.push('/sign-in');
   }
 
   if (!user) {
@@ -37,9 +37,6 @@ function UserMenu() {
       <div className="flex items-center space-x-4">
         <Button asChild variant="outline" className="rounded-full">
           <Link href="/sign-in">Sign In</Link>
-        </Button>
-        <Button asChild className="rounded-full">
-          <Link href="/sign-up">Sign Up</Link>
         </Button>
       </div>
     );

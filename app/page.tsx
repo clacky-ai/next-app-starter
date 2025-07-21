@@ -19,7 +19,7 @@ export default function HomePage() {
               size="lg"
               className="text-lg rounded-full px-8 py-3"
             >
-              <a href="/sign-up">
+              <a href="/sign-in">
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>

@@ -7,6 +7,22 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get('session');
 
   let res = NextResponse.next();
+  
+  // Set pathname header for layout route detection
+  res.headers.set('x-pathname', pathname);
+  
+  // Protect admin routes
+  if (pathname.startsWith('/admin')) {
+    if (!sessionCookie) {
+      return NextResponse.redirect(new URL('/sign-in', request.url));
+    }
+    
+    try {
+      await verifyToken(sessionCookie.value);
+    } catch (error) {
+      return NextResponse.redirect(new URL('/sign-in', request.url));
+    }
+  }
 
   if (sessionCookie && request.method === 'GET') {
     try {
