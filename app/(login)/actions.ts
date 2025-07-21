@@ -77,7 +77,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     logActivity(user.id, ActivityType.SIGN_IN)
   ]);
 
-  redirect('/dashboard');
+  redirect('/');
 });
 
 const signUpSchema = z.object({
@@ -125,7 +125,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
     setSession(createdUser)
   ]);
 
-  redirect('/dashboard');
+  redirect('/');
 });
 
 export async function signOut() {
