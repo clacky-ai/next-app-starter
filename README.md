@@ -1,12 +1,10 @@
-# Next.js App Starter
+# Next.js Admin Starter
 
-This is a starter template for building a application using **Next.js** with support for authentication, and a dashboard for logged-in users.
+This is a starter template for building a application using **Next.js** with support for authentication, and a dashboard for logged-in admin users.
 
 ## Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
+- Default dashboard pages on admin users
 - Email/password authentication with JWTs stored to cookies
 - Global middleware to protect logged-in routes
 - Local middleware to protect Server Actions or validate Zod schemas
