@@ -78,8 +78,6 @@ export default function ThemeControls() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuLabel>Theme Colors</DropdownMenuLabel>
-          <DropdownMenuSeparator />
           {themeColors.map((color) => (
             <DropdownMenuItem
               key={color.value}

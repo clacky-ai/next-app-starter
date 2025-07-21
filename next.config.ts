@@ -6,7 +6,12 @@ const nextConfig: NextConfig = {
     clientSegmentCache: true,
     nodeMiddleware: true
   },
-  allowedDevOrigins: ['*.clackypaas.com']
+  allowedDevOrigins: [
+    '*.clackypaas.com',
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0'
+  ]
 };
 
 export default nextConfig;
