@@ -4,9 +4,7 @@ This is a starter template for building a application using **Next.js** with sup
 
 ## Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
+- Default landing page (`/`)
 - Email/password authentication with JWTs stored to cookies
 - Global middleware to protect logged-in routes
 - Local middleware to protect Server Actions or validate Zod schemas
