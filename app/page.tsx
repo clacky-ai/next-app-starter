@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { siteConfig } from '@/lib/config';
 
 export default function HomePage() {
   return (
@@ -8,7 +9,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-foreground tracking-tight sm:text-5xl md:text-6xl">
             Welcome to
-            <span className="block text-primary">Demo App</span>
+            <span className="block text-primary">{siteConfig.name}</span>
           </h1>
           <p className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto">
             Build something you want from idea to application

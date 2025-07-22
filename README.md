@@ -5,6 +5,7 @@ This is a starter template for building a application using **Next.js** with sup
 ## Features
 
 - Default landing page (`/`)
+- Site configuration in `lib/config.ts`, remember to update the name and description
 - Email/password authentication with JWTs stored to cookies
 - Global middleware to protect logged-in routes
 - Local middleware to protect Server Actions or validate Zod schemas
@@ -21,7 +22,7 @@ This is a starter template for building a application using **Next.js** with sup
 
 ```bash
 git clone https://github.com/clacky-ai/next-app-starter
-cd app-starter
+cd next-app-starter
 npm install
 ```
 
