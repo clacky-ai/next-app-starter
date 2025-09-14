@@ -1,65 +1,142 @@
-# Next.js App Starter
+# Next.js 15 Full-Stack Starter
 
-This is a starter template for building a application using **Next.js** with support for authentication, and a dashboard for logged-in users.
+Modern web application template with Next.js 15, React 19, PostgreSQL, and Drizzle ORM.
 
-## Features
+## AI Agent Reference
 
-- Default landing page (`/`)
-- Site configuration in `lib/config.ts`, remember to update the name and description
-- Email/password authentication with JWTs stored to cookies
-- Global middleware to protect logged-in routes
-- Local middleware to protect Server Actions or validate Zod schemas
-- Activity logging system for any user events
+**Primary Reference**: `AI-REFERENCE.md` for quick implementation patterns
+**Templates**: `templates/` directory for code templates  
+**Quick Start**: `pnpm run db:generate && pnpm run db:migrate && pnpm run db:status && pnpm run build`
 
-## Tech Stack
+# Technical Stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+## Core Technologies
+- **Next.js 15.5.3**: App Router with route groups and server components
+- **React 19.1.0**: Latest features with React Compiler optimizations
+- **TypeScript 5.8.3**: Strict mode with full type safety
+- **PostgreSQL**: Database with connection pooling
+- **Drizzle ORM 0.43.1**: Type-safe database operations with drizzle-zod integration
+- **Tailwind CSS 4.1.7**: Utility-first styling with shadcn/ui components
 
-## Getting Started
+## Architecture Patterns
+- **Schema-First Development**: Database schema drives type generation
+- **Server Actions**: Form handling with `'use server'` and automatic validation
+- **Route Groups**: `(login)`, `(dashboard)`, `(public)` for feature organization
+- **Soft Deletes**: Default `deletedAt` timestamp pattern
+- **JWT Authentication**: HTTP-only cookies with middleware protection
 
-```bash
-git clone https://github.com/clacky-ai/next-app-starter
-cd next-app-starter
-npm install
+## File Structure
+
+```
+app/                     # Next.js 15 App Router
+├── (login)/            # Authentication routes
+├── (dashboard)/        # Protected routes  
+├── api/                # API endpoints
+└── globals.css         # Global styles
+
+lib/db/
+├── schema.ts           # Database schema (START HERE)
+├── drizzle.ts         # Database connection
+├── queries.ts         # Database operations
+└── migrations/        # Migration files
+
+components/
+├── ui/                # shadcn/ui base components
+└── [entity]/          # Feature-specific components
 ```
 
-## Theming
+## Next.js 15 Critical Changes
 
-This project comes with built-in theme support and light/dark mode toggle functionality. When developing, please use design tokens from the theme system instead of hardcoding colors. This ensures consistent styling and proper appearance in both light and dark modes.
+### Dynamic Route Parameters
+**⚠️ BREAKING CHANGE**: `params` is now a Promise and MUST be awaited.
 
-For example, use CSS variables like `var(--color-primary)` or Tailwind classes like `bg-primary text-primary-foreground` instead of explicit color codes.
+```typescript
+// ❌ Next.js 14 (Will cause errors)
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  const id = params.id; // ERROR
+}
 
-If you have color style preferences, you can define a new theme in the `contexts/theme-context.tsx` file to customize the application's appearance according to your brand or design requirements.
-
-## Running Locally
-
-Use the included setup script to create your `.env` file:
-
-```bash
-npm db:setup
+// ✅ Next.js 15 (Correct)
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params; // CORRECT
+}
 ```
 
-Run the database migrations and seed the database with a default user:
+## Drizzle ORM Patterns
 
-```bash
-npm db:migrate
-npm db:seed
+### Essential Operations
+```typescript
+// Create with validation
+const userData = insertUserSchema.parse(data);
+const [created] = await db.insert(users).values(userData).returning();
+
+// Read with soft delete filter
+const activeUsers = await db.select().from(users).where(isNull(users.deletedAt));
+
+// Update with timestamp
+const [updated] = await db.update(users)
+  .set({ ...data, updatedAt: new Date() })
+  .where(eq(users.id, id)).returning();
+
+// Soft delete (recommended)
+const [deleted] = await db.update(users)
+  .set({ deletedAt: new Date() })
+  .where(eq(users.id, id)).returning();
+
+// Transaction for multi-table operations
+await db.transaction(async (tx) => {
+  const [user] = await tx.insert(users).values(userData).returning();
+  await tx.insert(activityLogs).values({ userId: user.id, action: 'CREATED' });
+});
 ```
 
-This will create the following user and team:
+## Authentication System
+- JWT tokens in HTTP-only cookies with 24-hour expiration
+- bcryptjs password hashing with 10 salt rounds
+- Middleware-based route protection
+- Activity logging for audit trails
 
-- User: `test@test.com`
-- Password: `admin123`
+# Dependencies
 
-You can also create new users through the `/sign-up` route.
+## Core Stack
+- **Next.js (15.5.3)** + **React (19.1.0)** + **TypeScript (5.8.3)**
+- **PostgreSQL** + **Drizzle ORM (0.43.1)** + **drizzle-zod**
+- **Tailwind CSS (4.1.7)** + **shadcn/ui** + **Radix UI**
+- **jose (6.0.11)** + **bcryptjs (3.0.2)** for authentication
+- **zod (3.24.4)** for schema validation
+- **SWR (2.3.3)** for data fetching
 
-Finally, run the Next.js development server:
+## Quick Start
 
 ```bash
-npm dev
+# Install dependencies (requires pnpm)
+pnpm install
+
+# Setup environment and database
+pnpm run db:setup
+pnpm run db:migrate
+pnpm run db:seed
+
+# Start development server
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
+**Default User**: `test@test.com` / `admin123`
+
+## Available Scripts
+
+- `pnpm run dev` - Development server
+- `pnpm run build` - Production build
+- `pnpm run db:setup` - Initialize environment
+- `pnpm run db:generate` - Generate migrations
+- `pnpm run db:migrate` - Apply migrations
+- `pnpm run db:seed` - Seed database
+- `pnpm run db:status` - Check database status
+
+## Environment Variables
+
+Required variables (generated by `pnpm run db:setup`):
+```env
+POSTGRES_URL=postgresql://...
+AUTH_SECRET=random-256-bit-secret
+```

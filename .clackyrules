@@ -1,0 +1,78 @@
+## Schema-First Development (CRITICAL)
+- Always define database schema FIRST in `lib/db/schema.ts` before any other code
+- Use drizzle-zod auto-generated schemas: `createInsertSchema`, `createSelectSchema`
+- Omit auto-generated fields (id, createdAt, updatedAt) from insert schemas
+- Always implement soft deletes with `deletedAt` timestamp
+- Auto-infer types from drizzle schema: `typeof table.$inferSelect`
+
+## Next.js 15 Breaking Changes (MANDATORY)
+- Dynamic route params are now Promises: `{ params }: { params: Promise<{ id: string }> }`
+- Always await params first: `const { id } = await params;`
+- All page components using dynamic params must be async
+- Affects ALL files using `[param]` dynamic routing
+
+## CLI Command Sequence (REQUIRED ORDER)
+- Execute in exact order: `pnpm run db:generate && pnpm run db:migrate && pnpm run db:status && pnpm run build`
+- Never skip validation steps
+- AI Agent MUST use: db:generate, db:migrate, db:status, build
+- AI Agent MUST NOT use: db:studio (human-only), dev (long-running)
+
+## Database Operations (STRICT VALIDATION)
+- ALWAYS validate input using drizzle-zod schemas before database operations
+- Create: `insertSchema.parse()` then `db.insert().values().returning()`
+- Read: Always filter `isNull(table.deletedAt)` for active records
+- Update: Use `updateSchema.parse()`, always set `updatedAt: new Date()`
+- Delete: Prefer soft delete with `set({ deletedAt: new Date() })`
+- Use `db.transaction()` for multi-table operations
+
+## Server Actions (MANDATORY PATTERN)
+- Use `'use server'` directive for all database operations
+- Use `validatedActionWithUser` for authenticated actions
+- Return structured objects: `{ success: string }` or `{ error: string }`
+- Always validate with drizzle-zod schemas before processing
+
+## File Organization (STRICT STRUCTURE)
+- Schema: `lib/db/schema.ts` (single source of truth)
+- Server Actions: `app/(dashboard)/[entity]/actions.ts`
+- API Routes: `app/api/[entity]/route.ts` and `app/api/[entity]/[id]/route.ts`
+- Pages: `app/(dashboard)/[entity]/page.tsx`
+- Forms: `components/[entity]/[entity]-form.tsx`
+
+## Naming Conventions (ENFORCED)
+- Files: kebab-case (`user-profile.tsx`)
+- Components: PascalCase (`UserProfile`)
+- Functions: camelCase (`getUserById`)
+- Constants: SCREAMING_SNAKE_CASE (`API_BASE_URL`)
+- Route Groups: `(dashboard)`, `(login)`, `(public)`
+
+## TypeScript Standards (STRICT MODE)
+- Strict mode enabled with full type safety
+- Use `@/*` path aliases for imports from project root
+- Target ESNext with modern JavaScript features
+- All API routes must type params as Promise in Next.js 15
+
+## Architecture Constraints
+- No direct database calls from components
+- All database operations through Server Actions or API routes
+- Use shadcn/ui components as base (`components/ui/`)
+- JWT tokens in HTTP-only cookies only
+- Form handling through server actions with automatic validation
+
+## Import Organization (MANDATORY ORDER)
+1. React/Next.js imports
+2. Third-party libraries
+3. Internal imports (absolute paths with `@/`)
+4. Relative imports
+
+## Error Handling Patterns (REQUIRED)
+- API Routes: Return structured errors with proper HTTP status codes
+- Server Actions: Return `{ success: string }` or `{ error: string }` objects
+- Use Zod error handling for schema validation failures
+- Always handle drizzle-zod validation errors
+
+## Project Context (ESSENTIAL)
+- Tech Stack: Next.js 15 + React 19 + TypeScript + PostgreSQL + Drizzle ORM
+- Package Manager: pnpm (required for all commands)
+- Authentication: JWT tokens in HTTP-only cookies with middleware protection
+- Styling: Tailwind CSS with utility-first approach + shadcn/ui components
+- Database: PostgreSQL with connection pooling, soft deletes by default
